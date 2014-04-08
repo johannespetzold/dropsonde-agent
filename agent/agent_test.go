@@ -32,7 +32,7 @@ var _ = Describe("Agent", func() {
 			stopChan := make(chan struct{})
 			errChan := make(chan error)
 
-			go func(){
+			go func() {
 				defer close(errChan)
 				err := agent.Start(stopChan)
 				errChan <- err
@@ -58,12 +58,12 @@ var _ = Describe("Agent", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 		It("checks that there is a default emitter", func(done Done) {
-				defer close(done)
-				emitter.DefaultEmitter = nil
-				err := agent.Start(nil)
-				Expect(err).To(HaveOccurred())
-				Expect(err.Error()).To(Equal("Could not start agent. No default emitter provided."))
-			})
+			defer close(done)
+			emitter.DefaultEmitter = nil
+			err := agent.Start(nil)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("Could not start agent. No default emitter provided."))
+		})
 
 		It("listens for TCP packages and emits them", func() {
 

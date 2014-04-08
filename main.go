@@ -1,7 +1,6 @@
 package main
 
 import (
-	"dropsonde-agent/agent"
 	"os"
 	"os/signal"
 	"runtime/pprof"
@@ -11,10 +10,10 @@ import (
 func main() {
 	stopChan := make(chan struct{})
 
-	go func() {
-		err := agent.Start(stopChan)
-		// log error
-	}
+	//	go func() {
+	//		err := agent.Start(stopChan)
+	//		// log error
+	//	}
 
 	killChan := make(chan os.Signal)
 	signal.Notify(killChan, os.Kill, os.Interrupt)

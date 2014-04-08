@@ -1,20 +1,18 @@
 package agent
 
 import (
-	"fmt"
-	"net"
 	"dropsonde-agent/emitter"
 	"errors"
+	"fmt"
+	"net"
 	"sync"
 )
 
 var UdpIncomingPort = 42420
 var TcpIncomingPort = 42421
 
-
 var assignedUdpIncomingPort int
 var assignedUdpIncomingPortLock sync.RWMutex
-
 
 func Start(stopChan <-chan struct{}) (err error) {
 	if emitter.DefaultEmitter == nil {
@@ -53,8 +51,6 @@ func Start(stopChan <-chan struct{}) (err error) {
 		}
 		emitter.DefaultEmitter.Emit(buffer[0:n])
 	}
-	return
-
 }
 
 func setAssignedPort(port int) {
