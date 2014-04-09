@@ -2,5 +2,4 @@
 
 =========
 
-
 Go agent to collect and distribute metric and logging data from CF components.
