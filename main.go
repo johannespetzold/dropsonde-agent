@@ -1,6 +1,10 @@
 package main
 
 import (
+	"dropsonde-agent/agent"
+	"dropsonde-agent/emitter"
+	"flag"
+	"log"
 	"os"
 	"os/signal"
 	"runtime/pprof"
@@ -8,15 +12,25 @@ import (
 )
 
 func main() {
+	var debug bool
+	flag.BoolVar(&debug, "debug", false, "Enable debug logging.")
+	flag.Parse()
+
+	if debug {
+		emitter.DefaultEmitter = emitter.NewLoggingEmitter()
+	}
+
 	stopChan := make(chan struct{})
 
-	//	go func() {
-	//		err := agent.Start(stopChan)
-	//		// log error
-	//	}
+	go func() {
+		err := agent.Run(stopChan)
+		if err != nil {
+			log.Fatalf("failed to run agent: %v", err)
+		}
+	}()
 
-	killChan := make(chan os.Signal)
-	signal.Notify(killChan, os.Kill, os.Interrupt)
+	killChan := make(chan os.Signal, 2)
+	signal.Notify(killChan, syscall.SIGINT, syscall.SIGTERM)
 
 	for {
 		select {
@@ -35,7 +49,7 @@ func DumpGoRoutine() {
 }
 
 func RegisterGoRoutineDumpSignalChannel() chan os.Signal {
-	threadDumpChan := make(chan os.Signal)
+	threadDumpChan := make(chan os.Signal, 16)
 	signal.Notify(threadDumpChan, syscall.SIGUSR1)
 
 	return threadDumpChan
