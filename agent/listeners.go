@@ -1,10 +1,10 @@
 package agent
 
 import (
-	"net"
 	"io"
-	"time"
 	"log"
+	"net"
+	"time"
 )
 
 var TcpReadTimeout = 5 * time.Second
@@ -49,7 +49,7 @@ func (c *tcpPacketConn) ReadFrom(buffer []byte) (n int, addr net.Addr, err error
 	/*
 		Assume that errors returned from Accept() should affect the caller
 		but read errors are not fatal
-	 */
+	*/
 	if err != nil {
 		if err != io.ErrUnexpectedEOF {
 			log.Printf("error while reading from TCP connection: %v\n", err)

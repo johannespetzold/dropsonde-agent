@@ -1,12 +1,12 @@
 package agent
 
 import (
-	"github.com/cloudfoundry-incubator/dropsonde-agent/emitter"
+	"dropsonde-agent/emitter"
 	"errors"
 	"fmt"
-	"sync/atomic"
 	"log"
 	"net"
+	"sync/atomic"
 )
 
 var UdpListeningPort = &port{42420}
@@ -33,12 +33,13 @@ func Run(stopChan <-chan struct{}) (err error) {
 		close(tcpErrChan)
 	}()
 
-	loop: for {
+loop:
+	for {
 		select {
 		case data := <-dataChan:
-		   emitter.DefaultEmitter.Emit(data)
+			emitter.DefaultEmitter.Emit(data)
 		case <-stopChan:
-		  break loop
+			break loop
 		case err = <-udpErrChan:
 			break loop
 		case err = <-tcpErrChan:
@@ -54,24 +55,27 @@ func Run(stopChan <-chan struct{}) (err error) {
 		2. drain the shared data channel as listeners may push messages before receiving
 		   a close request
 		3. drain the error channels for the TCP/UDP listeners until the listeners have stopped
-	 */
+	*/
 
 	// request listeners to stop
 	close(internalStopChan)
 
 	// drain dataChan (ensures that listeners will be unblocked and can stop properly)
 	go func() {
-		for _ = range(dataChan) {}
+		for _ = range dataChan {
+		}
 	}()
 
 	// wait for listeners to actually stop
-	for _ = range udpErrChan {}
-	for _ = range tcpErrChan {}
+	for _ = range udpErrChan {
+	}
+	for _ = range tcpErrChan {
+	}
 
 	return
 }
 
-type port struct { val int32 }
+type port struct{ val int32 }
 
 func (p *port) Set(val int) {
 	atomic.StoreInt32(&p.val, int32(val))

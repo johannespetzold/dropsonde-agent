@@ -1,8 +1,8 @@
 package agent_test
 
 import (
-	"github.com/cloudfoundry-incubator/dropsonde-agent/agent"
-	"github.com/cloudfoundry-incubator/dropsonde-agent/emitter"
+	"dropsonde-agent/agent"
+	"dropsonde-agent/emitter"
 	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -22,10 +22,10 @@ func (fe *FakeEmitter) Emit(event emitter.Event) (err error) {
 var _ = Describe("Agent", func() {
 	Describe("Run", func() {
 		var (
-			eventChan chan emitter.Event
+			eventChan   chan emitter.Event
 			fakeEmitter *FakeEmitter
-			stopChan chan struct{}
-			errChan chan error
+			stopChan    chan struct{}
+			errChan     chan error
 		)
 
 		BeforeEach(func() {
