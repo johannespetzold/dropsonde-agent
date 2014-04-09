@@ -37,7 +37,10 @@ loop:
 	for {
 		select {
 		case data := <-dataChan:
-			emitter.DefaultEmitter.Emit(data)
+			emitErr := emitter.DefaultEmitter.Emit(data)
+			if emitErr != nil {
+				log.Printf("Error while emitting: %v\n", emitErr)
+			}
 		case <-stopChan:
 			break loop
 		case err = <-udpErrChan:

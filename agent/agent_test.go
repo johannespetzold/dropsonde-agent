@@ -11,18 +11,18 @@ import (
 )
 
 type FakeEmitter struct {
-	Events chan emitter.Event
+	DataChan chan []byte
 }
 
-func (fe *FakeEmitter) Emit(event emitter.Event) (err error) {
-	fe.Events <- event
+func (fe *FakeEmitter) Emit(data []byte) (err error) {
+	fe.DataChan <- data
 	return nil
 }
 
 var _ = Describe("Agent", func() {
 	Describe("Run", func() {
 		var (
-			eventChan   chan emitter.Event
+			dataChan    chan []byte
 			fakeEmitter *FakeEmitter
 			stopChan    chan struct{}
 			errChan     chan error
@@ -32,8 +32,8 @@ var _ = Describe("Agent", func() {
 			agent.UdpListeningPort.Set(0)
 			agent.TcpListeningPort.Set(0)
 
-			eventChan = make(chan emitter.Event, 10)
-			fakeEmitter = &FakeEmitter{eventChan}
+			dataChan = make(chan []byte, 10)
+			fakeEmitter = &FakeEmitter{dataChan}
 			emitter.DefaultEmitter = fakeEmitter
 
 			stopChan = make(chan struct{})
@@ -69,7 +69,7 @@ var _ = Describe("Agent", func() {
 
 			conn.Write(data)
 
-			event := <-fakeEmitter.Events
+			event := <-fakeEmitter.DataChan
 			Expect(event).To(Equal(data))
 
 			close(stopChan)
@@ -102,7 +102,7 @@ var _ = Describe("Agent", func() {
 			err = conn.Close()
 			Expect(err).ToNot(HaveOccurred())
 
-			event := <-fakeEmitter.Events
+			event := <-fakeEmitter.DataChan
 			Expect(event).To(Equal(data))
 
 			close(stopChan)
@@ -134,7 +134,7 @@ var _ = Describe("Agent", func() {
 				conn.Write(emptyData)
 				conn.Write(data)
 
-				event := <-fakeEmitter.Events
+				event := <-fakeEmitter.DataChan
 				Expect(event).To(Equal(data))
 
 				close(stopChan)
@@ -173,7 +173,7 @@ var _ = Describe("Agent", func() {
 				err = secondConn.Close()
 				Expect(err).ToNot(HaveOccurred())
 
-				event := <-fakeEmitter.Events
+				event := <-fakeEmitter.DataChan
 				Expect(event).To(Equal(data))
 
 				firstConn.Close()
