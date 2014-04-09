@@ -1,7 +1,7 @@
 package agent
 
 import (
-	"dropsonde-agent/emitter"
+	"github.com/cloudfoundry-incubator/dropsonde-agent/emitter"
 	"errors"
 	"fmt"
 	"net"

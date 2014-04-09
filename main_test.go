@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	//	"dropsonde-agent/main"
+	//	"github.com/cloudfoundry-incubator/dropsonde-agent/main"
 	. "github.com/onsi/ginkgo"
 	//	. "github.com/onsi/gomega"
 )

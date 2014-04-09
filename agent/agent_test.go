@@ -1,8 +1,8 @@
 package agent_test
 
 import (
-	"dropsonde-agent/agent"
-	"dropsonde-agent/emitter"
+	"github.com/cloudfoundry-incubator/dropsonde-agent/agent"
+	"github.com/cloudfoundry-incubator/dropsonde-agent/emitter"
 	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
