@@ -12,6 +12,10 @@ import (
 )
 
 func main() {
+	log.Printf("Agent starting, use CTL-C to quit\n")
+
+	defer log.Printf("Agent stopped\n")
+
 	var debug bool
 	flag.BoolVar(&debug, "debug", false, "Enable debug logging.")
 	flag.Parse()
