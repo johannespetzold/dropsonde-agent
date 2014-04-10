@@ -10,6 +10,7 @@ before_install:
 after_success:
 - 'echo "mode: set" > all.coverprofile'
 - 'find . -name "*.coverprofile" -exec grep -v mode: {} >> all.coverprofile \;'
+- sed -i -e 's/github.com\/cloudfoundry-incubator\///g' all.coverprofile
 - cat all.coverprofile
 - PATH=$HOME/gopath/bin:$PATH goveralls -coverprofile=all.coverprofile -repotoken=$COVERALLS_TOKEN
 
