@@ -6,7 +6,7 @@ before_install:
 - go get code.google.com/p/go.tools/cmd/cover
 - go get github.com/mattn/goveralls
 - go get github.com/onsi/ginkgo/ginkgo
-
+- ln -s $TRAVIS_BUILD_DIR $HOME/gopath/src/dropsonde-agent
 after_success:
 - 'echo "mode: set" > all.coverprofile'
 - 'find . -name "*.coverprofile" -exec grep -v mode: {} >> all.coverprofile \;'
